@@ -7,27 +7,19 @@
     <div class="main content">
         <div class="info">
             <h2 class="about">What is Banana For Scale?</h2>
-            <p>Ever wonder how a 90cm x 170cm x 90cm french-door refrigerator sizes up against a banana? Wonder no more.</p>    
+            <p>Ever wonder how a 90cm x 170cm x 90cm french-door refrigerator looks like next to a banana? Wonder no more.</p>
+            <p>Just enter the desired size and submit to render the scene.</p>    
         </div>
         
-        <form action="">
-            
-            <div class="div-form">
-                <div class="div-input">
-                    <label for="width">Width (cm):</label>
-                    <input type="text" id="width" name="width">
-                </div>
-                <div class="div-input">
-                    <label for="height">Height (cm):</label>
-                    <input type="text" id="height" name="height"> 
-                </div>
-                <div class="div-input">
-                    <label for="depth">Depth (cm):</label>
-                    <input type="text" id="depth" name="depth">
-                </div>
-                <button>Render</button>
-            </div>
-            
+        <form action="/render" method="POST">
+            <h3>Dimensions</h3>
+            <label for="width">Width (cm):</label>
+            <input type="text" id="width" name="width" required>
+            <label for="height">Height (cm):</label>
+            <input type="text" id="height" name="height" required> 
+            <label for="depth">Depth (cm):</label>
+            <input type="text" id="depth" name="depth" required>
+            <button>Render</button>
         </form>
     </div>
 
