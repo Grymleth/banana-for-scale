@@ -106,10 +106,14 @@ div div{
     display: block;
 }
 
-.contact form input{
+.contact form input[type="text"]{
     display: block;
     width: 100%;
     margin-bottom: 20px;
+}
+
+.contact form input[type="submit"]{
+    
 }
 
 .contact form textarea{
@@ -134,4 +138,12 @@ canvas{
     padding: 0;
     text-decoration: none;
     color: #222;
+}
+
+input, select, textarea, button{
+    font-family: inherit;
+}
+
+textarea{
+    resize: none;
 }

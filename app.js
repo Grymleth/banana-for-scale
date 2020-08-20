@@ -1,9 +1,11 @@
 const express = require('express');
+const sendMail = require('./mailgun/mail');
 
 const app = express();
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.listen(3000, () => {
     console.log('listening on port 3000');
 });
@@ -29,8 +31,17 @@ app.post('/render', (req, res) => {
 });
 
 app.post('/contact', (req, res) => {
+    const { email, subject, message } = req.body;
+    console.log('why is body empty');
     console.log(req.body);
-    res.redirect('404');
+    sendMail(email, subject, message, (err, data) => {
+        if(err){
+            res.status(500).json({ message: 'Internal sonuvabitch' });
+        }
+        else{
+            res.json({ message: 'Email Sent!' });
+        }
+    });
 })
 
 app.use((req, res) => {
