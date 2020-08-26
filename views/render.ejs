@@ -4,7 +4,7 @@
         <!-- Head -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="render.css">
+        <link rel="stylesheet" href="/css/render.css">
         <title>Banana For Scale | <%= title %></title>
     </head>
 	<body>
@@ -42,25 +42,24 @@
 			var loader = new THREE.GLTFLoader();
 			loader.load('threejs/banana.gltf', function(gltf){
 				banana = gltf.scene.children[0];
-				console.log(banana);
 				scene.add(gltf.scene);
 				renderer.render(scene, camera);
 			});
+			
+			// WTF, STRINGIFY OBJECT AND PARSE AGAIN
+			var object = '<%- JSON.stringify(dimensions) %>';
+			object = JSON.parse(object);
 
-			var dimensions = {
-				width: centiToMeter('<%= dimensions.width %>'),
-				height: centiToMeter('<%= dimensions.height %>'),
-				depth: centiToMeter('<%= dimensions.depth %>')
-			}
-
-			var geometry = new THREE.BoxGeometry(
-				dimensions.width, 
-				dimensions.height, 
-				dimensions.depth
-				);
+			var geometry = initGeometryFromObject(object);
 			var material = new THREE.MeshNormalMaterial();
 			var mesh = new THREE.Mesh(geometry, material);
-			mesh.position.z = - ((dimensions.depth / 2) + (0.178/2));
+
+			// create bounding box to get dimensions
+			var boundingBox = new THREE.Box3().setFromObject(mesh);
+			var boxSize = boundingBox.getSize();
+			
+			// offset mesh by the sum of the z of bounding box and half the length of banana
+			mesh.position.z = - ((boxSize.x / 2) + (0.178/2));
 
 			scene.add(mesh);
 
@@ -74,6 +73,29 @@
 
 			function centiToMeter(centi){
 				return centi / 100;
+			}
+
+			// returns a geometry object {box, sphere}
+			function initGeometryFromObject(object){
+				switch(object.type){
+					case 'box':
+						return new THREE.BoxGeometry(
+							centiToMeter(object.width),
+							centiToMeter(object.height),
+							centiToMeter(object.depth),
+						);
+						break;
+					case 'sphere':
+						return new THREE.SphereGeometry(
+							centiToMeter(object.radius),
+							object.width_segments,
+							object.height_segments
+						);
+						break;
+					default:
+						console.log('no support');
+						break;
+				}
 			}
 		</script>
 	</body>

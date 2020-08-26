@@ -11,18 +11,52 @@
             <p>Just enter the desired size and submit to render the scene.</p>    
         </div>
         
-        <form action="/render" method="POST">
-            <h3>Dimensions</h3>
-            <label for="width">Width (cm):</label>
-            <input type="text" id="width" name="width" required>
-            <label for="height">Height (cm):</label>
-            <input type="text" id="height" name="height" required> 
-            <label for="depth">Depth (cm):</label>
-            <input type="text" id="depth" name="depth" required>
-            <button>Render</button>
-        </form>
+        <form id="index-form"action="/render" method="POST">
+            <select name="type" id="geometry-select">
+                <option value="box">Box</option>
+                <option value="sphere">Sphere</option>
+            </select>
+
+            <div id="container">
+                
+            </div>
+        </form> 
     </div>
 
     <%- include('./partials/footer.ejs') %>
+
+    <script>
+        const xhr = new XMLHttpRequest();
+        const container = document.getElementById('container');
+        const select = document.getElementById('geometry-select');
+
+        xhr.onload = function(){
+            container.innerHTML = "";
+            if(this.status === 200){
+                container.innerHTML = xhr.responseText;
+            }
+            else{
+                container.innerHTML = `<p>You done fucked it up</p>`;
+            }
+        };
+
+        // event listener that calls the renderForm function
+        select.addEventListener('change', () => {
+            renderForm();
+        });
+
+        // function to render the form
+        const renderForm = () => {
+            const fileName = `${select.value}form.ejs`;
+
+            xhr.open('get', fileName);
+            xhr.send();
+        };
+
+        // initial call to render the form
+        renderForm();
+        
+    </script>
+
 </body>
 </html>

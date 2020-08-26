@@ -25,6 +25,14 @@ app.get('/contact', (req, res) => {
     res.render('contact', { title: 'Contact' });
 });
 
+app.get('/boxform.ejs', (req, res) => {
+    res.sendFile(__dirname + '/views/forms/boxform.ejs');
+});
+
+app.get('/sphereform.ejs', (req, res) => {
+    res.sendFile(__dirname + '/views/forms/sphereform.ejs');
+});
+
 app.post('/render', (req, res) => {
     console.log(req.body);
     res.render('render', { title: 'Render', dimensions: req.body });
@@ -42,7 +50,7 @@ app.post('/contact', (req, res) => {
             res.json({ message: 'Email Sent!' });
         }
     });
-})
+});
 
 app.use((req, res) => {
     res.status(404).render('404', {title: '404 '});
