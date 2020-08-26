@@ -94,10 +94,6 @@ body > div{
 .main form button:hover{
     background-color: #ffe135;
 }
-
-#container{
-    inherit
-}
 /* contact form */
 .contact form{
     max-width: 50%;
