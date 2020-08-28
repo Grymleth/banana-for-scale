@@ -1,5 +1,8 @@
 const express = require('express');
-const sendMail = require('./mailgun/mail');
+// import routes
+const formRoutes = require('./routes/formRoutes');
+const aboutRoutes = require('./routes/aboutRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -13,25 +16,14 @@ app.listen(3000, () => {
 // register view engine
 app.set('view engine', 'ejs');
 
+// routes
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
 });
 
-app.get('/about', (req, res) => {
-    res.render('about', { title: 'About' });
-});
+app.use('/about', aboutRoutes);
 
-app.get('/contact', (req, res) => {
-    res.render('contact', { title: 'Contact' });
-});
-
-app.get('/boxform.ejs', (req, res) => {
-    res.sendFile(__dirname + '/views/forms/boxform.ejs');
-});
-
-app.get('/sphereform.ejs', (req, res) => {
-    res.sendFile(__dirname + '/views/forms/sphereform.ejs');
-});
+app.use('/contact', contactRoutes);
 
 app.post('/render', (req, res) => {
     console.log(req.body);
@@ -39,18 +31,10 @@ app.post('/render', (req, res) => {
 });
 
 app.post('/contact', (req, res) => {
-    const { email, subject, message } = req.body;
-    console.log('why is body empty');
-    console.log(req.body);
-    sendMail(email, subject, message, (err, data) => {
-        if(err){
-            res.status(500).json({ message: 'Internal sonuvabitch' });
-        }
-        else{
-            res.json({ message: 'Email Sent!' });
-        }
-    });
+    
 });
+
+app.use('/forms', formRoutes);
 
 app.use((req, res) => {
     res.status(404).render('404', {title: '404 '});
