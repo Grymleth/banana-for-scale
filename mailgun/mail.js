@@ -2,12 +2,12 @@ const nodemailer = require('nodemailer');
 const mailGun = require('nodemailer-mailgun-transport');
 const fs = require('fs');
 
-const URI = fs.readFileSync('./mailgun/URI.txt', 'utf8');
+const { mailgunURI, mailgunDomain } = require('../config/keys');
 
 const auth = {
     auth: {
-        api_key: URI.slice(0, URI.indexOf('\n') - 1),
-        domain: URI.slice(URI.indexOf('\n') + 1)
+        api_key: mailgunURI,
+        domain: mailgunDomain
     }
 };
 
