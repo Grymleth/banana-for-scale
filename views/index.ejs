@@ -48,6 +48,7 @@
         // function to render the form
         const renderForm = () => {
             const fileName = `forms/${select.value}`;
+            console.log(fileName);
 
             xhr.open('get', fileName);
             xhr.send();
