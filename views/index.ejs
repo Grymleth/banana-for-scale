@@ -11,7 +11,7 @@
             <p>Just enter the desired size and submit to render the scene.</p>    
         </div>
         
-        <form id="index-form"action="/render" method="POST">
+        <form id="index-form" action="/render" method="POST">
             <select name="type" id="geometry-select">
                 <option value="box">Box</option>
                 <option value="sphere">Sphere</option>
@@ -26,38 +26,35 @@
     <%- include('./partials/footer.ejs') %>
 
     <script>
-        const xhr = new XMLHttpRequest();
         const container = document.getElementById('container');
         const select = document.getElementById('geometry-select');
 
-        xhr.onload = function(){
-            container.innerHTML = "";
-            if(this.status === 200){
-                container.innerHTML = xhr.responseText;
-            }
-            else{
-                container.innerHTML = `<p>You done fucked it up</p>`;
-            }
-        };
-
-        // event listener that calls the renderForm function
-        select.addEventListener('change', () => {
-            renderForm();
-        });
-
-        // function to render the form
-        const renderForm = () => {
-            const fileName = `/views/forms/${select.value}.ejs`;
-            console.log(fileName);
-
-            xhr.open('get', fileName);
-            xhr.send();
-        };
-
-        // initial call to render the form
-        renderForm();
-        
+        switch(select.value){
+            case 'box':
+                container.innerHTML = 
+                    `<label for="width">Width (cm):</label>
+                    <input type="text" id="width" name="width" required>
+                    <label for="height">Height (cm):</label>
+                    <input type="text" id="height" name="height" required> 
+                    <label for="depth">Depth (cm):</label>
+                    <input type="text" id="depth" name="depth" required>
+                    <button>Render</button>`;
+                break;
+            case 'sphere':
+                container.innerHTML = 
+                    `<label for="radius">Radius (cm):</label>
+                    <input type="text" id="radius" name="radius" required>
+                    <label for="width_segments">Width Segments:</label>
+                    <input type="text" id="width_segments" name="width_segments" required> 
+                    <label for="height_segments">Height Segments:</label>
+                    <input type="text" id="height_segments" name="height_segments" required>
+                    <button>Render</button>`;
+                break;
+            default:
+                container.innerHTML = `<p>You done fucked up </p>`;
+        }
     </script>
+        
 
 </body>
 </html>
